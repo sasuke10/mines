@@ -1,0 +1,30 @@
+$black: #171717;
+$blue: #133A8A;
+$white: #FFF;
+$gray: #C2C2C2;
+$gray-button: #6C6C6C;
+
+body {
+  background-color: $black;
+  font-family: 'Open Sans';
+  font-size: 16px;
+  margin: 0;
+}
+
+.buscaminas {
+  background-color: green;
+  display: flex;
+  flex-flow: row wrap;
+  height: 320px;
+  width: 320px;
+
+  &__item {
+    align-items: center;
+    background-color: yellow;
+    border: 1px solid black;
+    cursor: pointer;
+    height: 38px;
+    justify-content: center;
+    width: 38px;
+  }
+}
