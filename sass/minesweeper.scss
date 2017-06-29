@@ -26,5 +26,9 @@ body {
     height: 38px;
     justify-content: center;
     width: 38px;
+
+    &--open {
+      background-color: white;
+    }
   }
 }

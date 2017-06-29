@@ -128,7 +128,7 @@ export default class Minesweeper extends Component {
     const tablero = bombasAlrededor(generarBombas(inicializaMatriz()));
     const matriz = createMatriz(8);
     const minesweeper = createBoard(matriz, tablero);
-    this.setState({ minesweeper, openBox: [], tablero });
+    this.setState({ minesweeper, openBox: [], tablero, gameOver: false});
   }
 
   abrirAlrededor(xi,xj){
@@ -165,27 +165,23 @@ export default class Minesweeper extends Component {
   abrirCeros(vari,varj,fini,finj,cori,corj){
     const { openBox, tablero } = this.state;
     let array = [];
+    array = array.concat(`${cori}${corj}`);
     for(var i = vari; i <= fini; i++){
           for(var j = varj; j <= finj; j++){
             if(tablero[i][j] == 0){
               if(i == cori && j == corj){
-                console.log(`${i}${j}es esquina`);
+                //console.log(`${i}${j} It`s corner`);
                 array = array.concat(`${i}${j}`);
-                // this.setState({ openBox: openBox.concat(`${i}${j}`) })
               }else{
                 if(tablero[i][j] == 0){
-                  console.log(`${i}${j}es cero`);
+                  //console.log(`${i}${j} It`s zero`);
                   array = array.concat(`${i}${j}`);
-                  // this.setState({ openBox: openBox.concat(`${i}${j}`) })
-                  //this.abrirAlrededor(i, j,tablero);
                 }
               }
 
             }else{
               if(tablero[i][j] == "*"){
-                console.log(`${i}${j}es mina`);
-                //array = array.concat(`${i}${j}`);
-                // this.setState({ openBox: openBox.concat(`${i}${j}*`) })
+                //console.log(`${i}${j} It´s mine`);
               }
             }
           }
@@ -203,20 +199,24 @@ export default class Minesweeper extends Component {
 
     console.log(openBox);
 
-    const renderBoard = minesweeper.map(({ value, indexI, indexJ } = {}) => {
+    const renderBoard = minesweeper.map(({ id, value, indexI, indexJ } = {}) => {
       const box = Object.is('*', value)
-                   ? <MdBrightnessHigh size={30} color='blue' />
-                   : <span>{ value }</span>;
+                ? <MdBrightnessHigh size={30} color='blue' />
+                : !Object.is(0, value)
+                ? <span>{ value }</span>
+                : undefined;
 
       const action = Object.is('*', value)
                    ? this.setGameOver
                    : () => this.abrirAlrededor(indexI, indexJ, minesweeper);
 
-      const hideBox = openBox.includes(value) ? box : <span></span>;
+      const hideBox = openBox.includes(id) ? box : <span></span>;
+
+      const classNameBox = !openBox.includes(id) ? 'buscaminas__item' : 'buscaminas__item buscaminas__item--open';
 
       const renderBox = gameOver ? box : hideBox;
 
-      return <div className='buscaminas__item' onClick={ action }>{ renderBox }</div>;
+      return <div className={ classNameBox } onClick={ action }>{ renderBox }</div>;
     });
 
     const messageGameOver = gameOver ? <div>Has perdido el juego</div> : undefined;
