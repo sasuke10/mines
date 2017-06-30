@@ -1,43 +1,7 @@
 import React, { Component } from 'react';
 import { MdBrightnessHigh } from 'react-icons/lib/md';
 import { v4 } from 'uuid';
-
-function inicializaMatriz(){
-    var tabla = [];
-    for(var i = 0; i < 8; i++){
-        tabla[i] = [0,0,0,0,0,0,0,0];
-    }
-    return tabla;
-}
-
-function crearTablero(){
-    let aux = [];
-    for(var i = 0; i < 8; i++){
-        for(var j = 0; j < 8; j++){
-            const val = i + "" + j;
-            aux = aux.concat(val);
-        }
-    }
-    return aux;
-}
-
-function generarBombas(tablero){
-    var fil = 0;
-    var col = 0;
-
-    fil = Math.floor((Math.random()*7)+0);
-    col = Math.floor((Math.random()*7)+0);
-
-    for(var i = 0; i < 8; i++){
-        while (tablero[fil][col] == "*"){
-            fil = Math.floor((Math.random()*7)+0);
-            col = Math.floor((Math.random()*7)+0);
-        }
-        tablero[fil][col] = "*";
-    }
-
-    return tablero;
-}
+import { createMatrixMinesweeper, generateBombs } from './minesweeper-data'
 
 function colocaNumeroBombas(vari,varj,fini,finj,tablero){
     for(var i = vari; i <= fini; i++){
@@ -107,7 +71,7 @@ export default class Minesweeper extends Component {
   constructor(){
     super();
 
-    const tablero = bombasAlrededor(generarBombas(inicializaMatriz()));
+    const tablero = bombasAlrededor(generateBombs(createMatrixMinesweeper()));
     const matriz = createMatriz(8);
     const minesweeper = createBoard(matriz, tablero);
 
@@ -125,7 +89,7 @@ export default class Minesweeper extends Component {
   }
 
   generateNewGame() {
-    const tablero = bombasAlrededor(generarBombas(inicializaMatriz()));
+    const tablero = bombasAlrededor(generateBombs(createMatrixMinesweeper()));
     const matriz = createMatriz(8);
     const minesweeper = createBoard(matriz, tablero);
     this.setState({ minesweeper, openBox: [], tablero, gameOver: false});
@@ -201,7 +165,7 @@ export default class Minesweeper extends Component {
 
     const renderBoard = minesweeper.map(({ id, value, indexI, indexJ } = {}) => {
       const box = Object.is('*', value)
-                ? <MdBrightnessHigh size={30} color='blue' />
+                ? <MdBrightnessHigh size={30} color='#C2C2C2' />
                 : !Object.is(0, value)
                 ? <span>{ value }</span>
                 : undefined;
